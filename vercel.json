@@ -1,0 +1,105 @@
+{
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/about-us",
+      "destination": "/#grown-in-gozo",
+      "permanent": true
+    },
+    {
+      "source": "/about-us/",
+      "destination": "/#grown-in-gozo",
+      "permanent": true
+    },
+    {
+      "source": "/process-2",
+      "destination": "/#grown-in-gozo",
+      "permanent": true
+    },
+    {
+      "source": "/process-2/",
+      "destination": "/#grown-in-gozo",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "destination": "/#wines-liqueurs",
+      "permanent": true
+    },
+    {
+      "source": "/products/",
+      "destination": "/#wines-liqueurs",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/#visit-contact",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us/",
+      "destination": "/#visit-contact",
+      "permanent": true
+    },
+    {
+      "source": "/news",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/news/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/new-packaging",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/new-packaging/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/new-website",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/new-website/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/tradefair2010",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/tradefair2010/",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
