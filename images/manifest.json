@@ -471,6 +471,32 @@
   },
   "src": "olives.jpg"
  },
+ "engraving-fruit-platter": {
+  "variants": [
+   {
+    "w": 407,
+    "h": 268
+   }
+  ],
+  "fallback": {
+   "w": 407,
+   "h": 268
+  },
+  "src": "engraving-fruit-platter.png"
+ },
+ "engraving-sower-field": {
+  "variants": [
+   {
+    "w": 375,
+    "h": 237
+   }
+  ],
+  "fallback": {
+   "w": 375,
+   "h": 237
+  },
+  "src": "engraving-sower-field.png"
+ },
  "gozo-cottage-logo": {
   "variants": [
    {

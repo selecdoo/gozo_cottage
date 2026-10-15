@@ -151,6 +151,13 @@ section.s.dark .photo figcaption{color:#d9d0b8}
 section.s.alt .card{background:#fffdf7}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--olive);margin-bottom:.4rem}
 
+.headrow{display:grid;gap:1.5rem 2.5rem;grid-template-columns:1fr auto;align-items:end;margin-bottom:2rem}
+.headrow .head{margin-bottom:0}
+.engr{max-width:407px}
+.engr img{background:#f1e9d6;border-radius:14px;padding:.5rem;box-shadow:none;width:100%;height:auto}
+@media(max-width:860px){.headrow{grid-template-columns:1fr}.engr{max-width:300px}}
+.fundfoot{max-width:560px;margin:0 0 1rem}
+.fundfoot img{border-radius:10px;width:100%;height:auto;background:#fff}
 /* tables / lists */
 .defs{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));margin:1.4rem 0 0}
 .defs div{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem}
@@ -159,7 +166,7 @@ section.s.alt .card{background:#fffdf7}
 ul.tick{padding-left:0;list-style:none;margin:0 0 1em}
 ul.tick li{padding-left:1.6rem;position:relative;margin:.35rem 0}
 ul.tick li::before{content:"";position:absolute;left:0;top:.62em;width:.65rem;height:.65rem;border-radius:50%;background:var(--red)}
-.notice{display:grid;gap:1.4rem;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;margin-top:2.6rem;padding:1.4rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
+.notice{display:grid;gap:1.4rem;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);align-items:center;margin-top:2.6rem;padding:1.4rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
 .notice img{border-radius:12px;width:100%}
 .notice h3{margin-top:0}
 section.s.dark .notice{color:var(--ink)}
@@ -587,11 +594,12 @@ footer.site li{margin:.3rem 0}
   <!-- 2 JAMS & OLIVE OILS -->
   <section class="s alt" id="jams-olive-oil" aria-labelledby="h-jams">
     <div class="wrap">
-      <div class="head">
+      <div class="headrow"><div class="head">
         <p class="eyebrow">Pressed within 24 hours · cooked on harvest day</p>
         <h2 id="h-jams">Artisanal Jams &amp; Olive Oils</h2>
         <p class="answer">Gozo Cottage presses Gigantija extra virgin olive oil from Gozo-grown olives and makes six marmalades and jams, local Gozo jams from tangerine, orange, lemon, prickly pear, fig and pear.</p>
       </div>
+      <figure class="photo engr"><picture><source type="image/webp" srcset="/images/engraving-fruit-platter-407.webp 407w" sizes="(min-width:860px) 407px, 70vw"><img src="/images/engraving-fruit-platter.jpg" width="407" height="268" alt="Vintage engraving of a decorated platter heaped with grapes, figs, pomegranates and other fruit" loading="lazy" decoding="async"></picture></figure></div>
 
       <div class="split">
         <div>
@@ -676,11 +684,12 @@ footer.site li{margin:.3rem 0}
   <!-- 4 GROWN & HARVESTED -->
   <section class="s dark" id="grown-in-gozo" aria-labelledby="h-grown">
     <div class="wrap">
-      <div class="head">
+      <div class="headrow"><div class="head">
         <p class="eyebrow">Farming tradition on the Island of Gozo</p>
         <h2 id="h-grown">Grown &amp; Harvested in Gozo</h2>
         <p class="answer" style="border-color:#f2d58a">Gozo’s produce is known for its taste because of a Mediterranean climate, fertile soil in terraced fields, fresh groundwater and the nearby sea, and Gozo Cottage uses only produce grown and harvested on the island.</p>
       </div>
+      <figure class="photo engr"><picture><source type="image/webp" srcset="/images/engraving-sower-field-375.webp 375w" sizes="(min-width:860px) 375px, 70vw"><img src="/images/engraving-sower-field.jpg" width="375" height="237" alt="Vintage engraving of a farmer sowing seed by hand in a ploughed field, with a horse-drawn plough and a village church behind" loading="lazy" decoding="async"></picture></figure></div>
 
       <div class="split">
         <div>
@@ -700,7 +709,7 @@ footer.site li{margin:.3rem 0}
       <p>All Gozo Cottage products share the same secret: the best agri-produce of Gozo, harvested and processed on the same day, with no added artificial flavours, preservatives or dyes. The company works from modern facilities in Gozo, where traditional recipes meet current technology, under strict HACCP hygiene rules.</p>
       <p>Gozo Cottage lists these areas in its facility: winery and cellars, meat processing and ageing, dairy production with raw-milk reception, jam processing, olive oil production, packaging and a testing, research and tasting room.</p>
 
-      <div class="notice">
+      <div class="notice" id="funding-notice">
         <figure class="photo" style="margin:0">
           <picture><source type="image/webp" srcset="/images/eu-rural-development-funding-notice-480.webp 480w, /images/eu-rural-development-funding-notice-800.webp 800w, /images/eu-rural-development-funding-notice-1024.webp 1024w" sizes="(min-width:860px) 480px, 92vw"><img src="/images/eu-rural-development-funding-notice.jpg" width="1024" height="558" alt="Funding notice: Project part financed by the European Union, Rural Development Programme for Malta 2014-2020, Measure 4 Sub-measure 4.2" loading="lazy" decoding="async"></picture>
         </figure>
@@ -830,6 +839,7 @@ footer.site li{margin:.3rem 0}
       </div>
     </div>
     <div class="legalline">
+      <div class="fundfoot"><picture><source type="image/webp" srcset="/images/eu-rural-development-funding-notice-480.webp 480w, /images/eu-rural-development-funding-notice-800.webp 800w, /images/eu-rural-development-funding-notice-1024.webp 1024w" sizes="(min-width:860px) 560px, 92vw"><img src="/images/eu-rural-development-funding-notice.jpg" width="1024" height="558" alt="Funding notice: Project part financed by the European Union, Rural Development Programme for Malta 2014-2020, Measure 4 Sub-measure 4.2" loading="lazy" decoding="async"></picture></div>
       <p>Project part financed by the European Union – Rural Development Programme for Malta 2014–2020, European Agricultural Fund for Rural Development (EAFRD). <a href="/legal-notice/#funding">Details</a></p>
       <p>© 2026 gozocottage.com | all rights reserved. Gozo Cottage is a trading name of Cottage Products (Gozo) Ltd.</p>
     </div>

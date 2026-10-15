@@ -55,6 +55,8 @@ ALT = {
     "eu-rural-development-funding-notice": "Funding notice: Project part financed by the European Union, Rural Development Programme for Malta 2014-2020, Measure 4 Sub-measure 4.2",
     "gozo-cottage-gift-selection-shelf": "Shelf of gift boxes with olive oil bottles, Limuncell liqueur, wine and salami",
 }
+ALT["engraving-fruit-platter"] = "Vintage engraving of a decorated platter heaped with grapes, figs, pomegranates and other fruit"
+ALT["engraving-sower-field"] = "Vintage engraving of a farmer sowing seed by hand in a ploughed field, with a horse-drawn plough and a village church behind"
 LOGO_ALT = "Gozo Cottage logo: genuine produce of Gozo, established 2003"
 
 FAQ = [
@@ -191,6 +193,7 @@ def footer():
       </div>
     </div>
     <div class="legalline">
+      <div class="fundfoot">{pic("eu-rural-development-funding-notice", "(min-width:860px) 560px, 92vw")}</div>
       <p>Project part financed by the European Union – Rural Development Programme for Malta 2014–2020, European Agricultural Fund for Rural Development (EAFRD). <a href="/legal-notice/#funding">Details</a></p>
       <p>© 2026 gozocottage.com | all rights reserved. Gozo Cottage is a trading name of {esc(f["legal"])}.</p>
     </div>

@@ -150,6 +150,13 @@ section.s.dark .photo figcaption{color:#d9d0b8}
 section.s.alt .card{background:#fffdf7}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--olive);margin-bottom:.4rem}
 
+.headrow{display:grid;gap:1.5rem 2.5rem;grid-template-columns:1fr auto;align-items:end;margin-bottom:2rem}
+.headrow .head{margin-bottom:0}
+.engr{max-width:407px}
+.engr img{background:#f1e9d6;border-radius:14px;padding:.5rem;box-shadow:none;width:100%;height:auto}
+@media(max-width:860px){.headrow{grid-template-columns:1fr}.engr{max-width:300px}}
+.fundfoot{max-width:560px;margin:0 0 1rem}
+.fundfoot img{border-radius:10px;width:100%;height:auto;background:#fff}
 /* tables / lists */
 .defs{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));margin:1.4rem 0 0}
 .defs div{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem}
@@ -158,7 +165,7 @@ section.s.alt .card{background:#fffdf7}
 ul.tick{padding-left:0;list-style:none;margin:0 0 1em}
 ul.tick li{padding-left:1.6rem;position:relative;margin:.35rem 0}
 ul.tick li::before{content:"";position:absolute;left:0;top:.62em;width:.65rem;height:.65rem;border-radius:50%;background:var(--red)}
-.notice{display:grid;gap:1.4rem;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;margin-top:2.6rem;padding:1.4rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
+.notice{display:grid;gap:1.4rem;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);align-items:center;margin-top:2.6rem;padding:1.4rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
 .notice img{border-radius:12px;width:100%}
 .notice h3{margin-top:0}
 section.s.dark .notice{color:var(--ink)}
@@ -597,6 +604,7 @@ footer.site li{margin:.3rem 0}
       </div>
     </div>
     <div class="legalline">
+      <div class="fundfoot"><picture><source type="image/webp" srcset="/images/eu-rural-development-funding-notice-480.webp 480w, /images/eu-rural-development-funding-notice-800.webp 800w, /images/eu-rural-development-funding-notice-1024.webp 1024w" sizes="(min-width:860px) 560px, 92vw"><img src="/images/eu-rural-development-funding-notice.jpg" width="1024" height="558" alt="Funding notice: Project part financed by the European Union, Rural Development Programme for Malta 2014-2020, Measure 4 Sub-measure 4.2" loading="lazy" decoding="async"></picture></div>
       <p>Project part financed by the European Union – Rural Development Programme for Malta 2014–2020, European Agricultural Fund for Rural Development (EAFRD). <a href="/legal-notice/#funding">Details</a></p>
       <p>© 2026 gozocottage.com | all rights reserved. Gozo Cottage is a trading name of Cottage Products (Gozo) Ltd.</p>
     </div>

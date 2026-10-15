@@ -36,6 +36,8 @@ IMAGES = {
     "gozo-cottage-sweet-tomato-paste-sundried-tomatoes": "703170411_1464369325707548_5365683364521392327_n.jpg",
     "eu-rural-development-funding-notice": "WhatsApp-Image-2023-09-27-at-12.16.27.jpeg",
     "gozo-green-olives-harvest": "olives.jpg",
+    "engraving-fruit-platter": "engraving-fruit-platter.png",
+    "engraving-sower-field": "engraving-sower-field.png",
 }
 WIDTHS = (480, 800, 1280, 1920)
 manifest = {}

@@ -23,7 +23,7 @@ Weitere Pflicht-Tags je Seite (geprüft): canonical = og:url (absolut), `robots 
 | 3 | Can I buy Gozo Cottage wines, cheeses, and jams online or at trade fairs? | 48 |
 | 4 | What makes Gozitan agricultural produce unique? | 50 |
 
-Haupttext (Hero + Abschnitt „Grown & Harvested in Gozo“, ohne Förderhinweis): **351 Wörter** (Vorgabe 300–500). Gesamter Fließtext aller `<p>` der Startseite inkl. Produktkarten: 1666 Wörter.
+Haupttext (Hero + Abschnitt „Grown & Harvested in Gozo“, ohne Förderhinweis): **403 Wörter** (Vorgabe 300–500). Gesamter Fließtext aller `<p>` der Startseite inkl. Produktkarten: 1666 Wörter.
 
 ## 3. Überschriftenstruktur Startseite
 
@@ -40,7 +40,7 @@ Keine übersprungenen Ebenen (H1 → H2 → H3 → H4), geprüft für alle drei 
 
 ## 4. Bilder
 
-- Verwendet: alle 20 Bilder aus `INFO/Images` inkl. Logo – bis auf die unten genannte Ausnahme. Jedes `<img>` hat `alt`, `width`, `height`; Hero: `fetchpriority="high"` + Preload, alle anderen `loading="lazy"`.
+- Verwendet: alle 23 Bilder aus `INFO/Images` inkl. Logo – bis auf die unten genannte Ausnahme. Jedes `<img>` hat `alt`, `width`, `height`; Hero: `fetchpriority="high"` + Preload, alle anderen `loading="lazy"`.
 - Nicht verwendet: `490181379_1112802974197520_303080100657602617_n.jpg` (Bar-Regal mit Fremdmarken, siehe `open-questions.md` Punkt 14).
 - Format: WebP in 640 / 1280 / 1920 px (nie hochskaliert) über `<picture>`/`srcset`/`sizes`, JPEG-Fallback; SEO-Dateinamen.
 

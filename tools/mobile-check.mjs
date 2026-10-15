@@ -22,11 +22,12 @@ await send("Page.navigate", { url });
 await wait(2500);
 // scroll through to trigger lazy images
 const H = await ev("document.documentElement.scrollHeight");
-for (let y = 0; y < H; y += 600) { await ev(`window.scrollTo(0,${y})`); await wait(120); }
+for (let y = 0; y < H; y += 600) { await ev(`window.scrollTo(0,${y})`); await wait(300); }
+await wait(1500);
 await ev("window.scrollTo(0,0)"); await wait(400);
 const info = await ev(`JSON.stringify({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,h:document.documentElement.scrollHeight,
  over:[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();return r.right>document.documentElement.clientWidth+1 && getComputedStyle(e).position!=='fixed' && !e.closest('.rail')}).slice(0,8).map(e=>e.tagName+'.'+e.className+' '+Math.round(e.getBoundingClientRect().right)),
- broken:[...document.images].filter(i=>i.complete&&i.naturalWidth===0).map(i=>i.src)})`);
+ pending:[...document.images].filter(i=>!i.complete).length,broken:[...document.images].filter(i=>i.complete&&i.naturalWidth===0).map(i=>i.src)})`);
 console.log(tag, info);
 const clips = JSON.parse(process.argv[5] || "[]");
 for (const [name, y, h] of clips) {

@@ -197,7 +197,7 @@ for slug, m in build.MAN.items():
         continue
     check(f"{slug}.jpg" in used, f"image not used in any page: {slug}")
 src_files = sorted(f for f in os.listdir(os.path.join(ROOT, "INFO", "Images")) if f.lower().endswith((".jpg", ".jpeg", ".png")))
-mapped = {m["src"] for m in build.MAN.values() if "src" in m} | {"Logo.jpg"}
+mapped = {m["src"] for m in build.MAN.values() if "src" in m} | {"Logo.jpg", "eu-funding-notice-full.png"}
 unused = [f for f in src_files if f not in mapped]
 
 # contrast
