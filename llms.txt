@@ -10,6 +10,7 @@
 - Facebook: https://www.facebook.com/GozoCottage/
 - Opening hours: not published
 - Sold in: many selected delicatessens and leading establishments across Malta and Gozo (per the company); no online shop listed
+- Languages of this website: English, Maltese (Malti), Italian (Italiano)
 
 ## Products
 - Gigantija Extra Virgin Olive Oil
@@ -20,6 +21,8 @@
 - Merlot red wine
 
 ## Pages
-- [Home](https://www.gozocottage.com/): products, farming tradition, FAQ, contact
-- [Privacy Policy](https://www.gozocottage.com/privacy-policy/)
-- [Legal Notice](https://www.gozocottage.com/legal-notice/)
+- [Home (English)](https://www.gozocottage.com/): products, farming tradition, FAQ, contact
+- [Home (Malti)](https://www.gozocottage.com/mt/)
+- [Home (Italiano)](https://www.gozocottage.com/it/)
+- [Legal Notice](https://www.gozocottage.com/legal-notice/) · [MT](https://www.gozocottage.com/mt/legal-notice/) · [IT](https://www.gozocottage.com/it/legal-notice/)
+- [Privacy Policy (English only)](https://www.gozocottage.com/privacy-policy/)

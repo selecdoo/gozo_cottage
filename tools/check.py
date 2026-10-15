@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Quality gate for the built site. Exits 1 on any failure; writes seo-report.md.
+"""Quality gate for the built site (EN/MT/IT). Exits 1 on any failure; writes seo-report.md.
 
   python3 -I tools/build.py && python3 -I tools/check.py
 """
@@ -14,8 +14,10 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build  # noqa: E402
+import i18n as I  # noqa: E402
 
 ROOT = build.ROOT
+DOMAIN = build.DOMAIN
 fails = []
 
 
@@ -84,7 +86,7 @@ def meta(doc, key, attr="name"):
 
 
 def words(s):
-    return len(re.findall(r"\b[\w’'’-]+\b", s))
+    return len(re.findall(r"\b[\w’'-]+\b", s))
 
 
 def lum(h):
@@ -98,116 +100,146 @@ def ratio(a, b):
     return (la + .05) / (lb + .05)
 
 
-rows, report = [], []
-seen_t, seen_d = set(), set()
+rows, faq_rows, main_rows = [], [], []
+seen_t, seen_d, seen_ogt = {}, {}, {}
 all_img_files = set()
-for key, pg in build.PAGES.items():
+hreflang = {}
+en_img_count = len(parse("index.html").imgs)
+for (key, lang), pg in build.PAGES.items():
     path = pg["file"] + ".html"
+    tag = f"{key}/{lang}"
     doc = open(os.path.join(ROOT, path), encoding="utf8").read()
     src = open(os.path.join(ROOT, pg["file"] + ".src.html"), encoding="utf8").read()
-    t, d = meta(doc, "description") and re.search(r"<title>(.*?)</title>", doc).group(1), meta(doc, "description")
-    t = html.unescape(t)
+    t = html.unescape(re.search(r"<title>(.*?)</title>", doc).group(1))
+    d = meta(doc, "description")
     ogt, ogd = meta(doc, "og:title", "property"), meta(doc, "og:description", "property")
     img = meta(doc, "og:image", "property")
-    check(30 <= len(t) <= 60, f"{key}: title length {len(t)}")
-    check(120 <= len(d) <= 155, f"{key}: description length {len(d)}")
-    check(len(ogt) <= 90, f"{key}: og:title length {len(ogt)}")
-    check(len(ogd) <= 200, f"{key}: og:description length {len(ogd)}")
-    check(t not in seen_t and d not in seen_d, f"{key}: duplicate title/description")
-    seen_t.add(t), seen_d.add(d)
-    check(ogt != t, f"{key}: og:title identical to title")
-    check(t.endswith("| Gozo Cottage"), f"{key}: title brand suffix")
-    local = os.path.join(ROOT, img.replace(build.DOMAIN + "/", ""))
-    check(os.path.exists(local), f"{key}: og image missing")
+    check(30 <= len(t) <= 60, f"{tag}: title length {len(t)}")
+    check(120 <= len(d) <= 155, f"{tag}: description length {len(d)}")
+    check(len(ogt) <= 90, f"{tag}: og:title length {len(ogt)}")
+    check(len(ogd) <= 200, f"{tag}: og:description length {len(ogd)}")
+    check(t not in seen_t and d not in seen_d and ogt not in seen_ogt, f"{tag}: duplicate title/description/og:title")
+    seen_t[t] = seen_d[d] = seen_ogt[ogt] = tag
+    check(ogt != t, f"{tag}: og:title identical to title")
+    check(t.endswith("| Gozo Cottage"), f"{tag}: title brand suffix")
+    local = os.path.join(ROOT, img.replace(DOMAIN + "/", ""))
+    check(os.path.exists(local), f"{tag}: og image missing")
     w, h = Image.open(local).size
     kb = os.path.getsize(local) / 1024
-    check((w, h) == (1200, 630) and kb < 300, f"{key}: og image {w}x{h} {kb:.0f}KB")
-    check(meta(doc, "og:url", "property") == build.DOMAIN + pg["path"] and f'rel="canonical" href="{build.DOMAIN + pg["path"]}"' in doc, f"{key}: canonical/og:url")
+    check((w, h) == (1200, 630) and kb < 300, f"{tag}: og image {w}x{h} {kb:.0f}KB")
+    url = DOMAIN + pg["path"]
+    check(meta(doc, "og:url", "property") == url and f'rel="canonical" href="{url}"' in doc, f"{tag}: canonical/og:url")
+    check(f'<html lang="{lang}">' in doc and meta(doc, "og:locale", "property") == I.OG_LOCALE[lang], f"{tag}: lang/og:locale")
     for need in ('property="og:image:width"', 'property="og:image:height"', 'property="og:image:alt"', 'property="og:site_name" content="Gozo Cottage"',
-                 'property="og:locale" content="en_GB"', 'name="twitter:card" content="summary_large_image"', 'name="twitter:image:alt"',
-                 'content="index, follow, max-image-preview:large"', '<html lang="en">', 'rel="apple-touch-icon"', 'rel="icon"'):
-        check(need in doc, f"{key}: missing {need}")
+                 'name="twitter:card" content="summary_large_image"', 'name="twitter:image:alt"',
+                 'content="index, follow, max-image-preview:large"', 'rel="apple-touch-icon"', 'rel="icon"'):
+        check(need in doc, f"{tag}: missing {need}")
+    if key in ("home", "legal"):
+        alts = dict(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"', doc))
+        hreflang[(key, lang)] = alts
+        check(set(alts) == set(I.LANGS) | {"x-default"}, f"{tag}: hreflang set {sorted(alts)}")
+        check(alts.get(lang) == url, f"{tag}: hreflang not self-referencing")
 
     pm, ps = parse(path), parse(pg["file"] + ".src.html")
-    check(pm.h == ps.h, f"{key}: minified headings differ from source")
+    check(pm.h == ps.h, f"{tag}: minified headings differ from source")
     h1 = [x for x in pm.h if x[0] == 1]
-    check(len(h1) == 1, f"{key}: {len(h1)} h1")
+    check(len(h1) == 1, f"{tag}: {len(h1)} h1")
     prev = 0
     for lvl, txt in pm.h:
-        check(lvl <= prev + 1, f"{key}: heading level jump to h{lvl} ({txt[:30]})")
+        check(lvl <= prev + 1, f"{tag}: heading level jump to h{lvl} ({txt[:30]})")
         prev = lvl
     for i in pm.imgs:
-        check(i.get("alt") and i.get("width") and i.get("height"), f"{key}: img without alt/width/height {i.get('src')}")
-        all_img_files.add(i["src"])
-        check(os.path.exists(os.path.join(ROOT, i["src"].lstrip("/"))), f"{key}: missing file {i['src']}")
+        check(i.get("alt") and i.get("width") and i.get("height"), f"{tag}: img without alt/width/height {i.get('src')}")
+        if key == "home" and lang == "en":
+            all_img_files.add(i["src"])
+        check(os.path.exists(os.path.join(ROOT, i["src"].lstrip("/"))), f"{tag}: missing file {i['src']}")
+    if key == "home":
+        check(len(pm.imgs) == en_img_count, f"{tag}: image count differs from EN")
     for hr in pm.hrefs:
-        if hr.startswith("/#"):
-            check(hr[2:] in parse("index.html").ids, f"{key}: dangling anchor {hr}")
-        elif hr.startswith("#"):
-            check(hr[1:] in pm.ids, f"{key}: dangling anchor {hr}")
+        if hr.startswith(("http", "mailto:", "tel:")):
+            continue
+        base = hr.split("#")[0]
+        frag = hr.split("#")[1] if "#" in hr else None
+        if base:
+            check(os.path.exists(os.path.join(ROOT, base.lstrip("/"), "index.html")), f"{tag}: dead link {hr}")
+        if frag:
+            target = (base or pg["path"]).lstrip("/")
+            tp = parse(target + "index.html")
+            check(frag in tp.ids, f"{tag}: dangling anchor {hr}")
     for a in re.findall(r'<a [^>]*target="_blank"[^>]*>', doc):
-        check('rel="noopener"' in a, f"{key}: _blank without noopener")
+        check('rel="noopener"' in a, f"{tag}: _blank without noopener")
     # JSON-LD
-    check(len(pm.ld) == 1, f"{key}: json-ld blocks {len(pm.ld)}")
+    check(len(pm.ld) == 1, f"{tag}: json-ld blocks {len(pm.ld)}")
     ld = json.loads(pm.ld[0])
-    types = [n["@type"] for n in ld["@graph"]]
-    for n in ld["@graph"]:
-        check("@type" in n, f"{key}: node without type")
     biz = ld["@graph"][0]
-    for f in ("name", "legalName", "url", "telephone", "email", "address", "logo", "sameAs"):
-        check(f in biz, f"{key}: LocalBusiness missing {f}")
-    check("geo" not in biz and "openingHoursSpecification" not in biz and "aggregateRating" not in biz, f"{key}: invented schema field")
+    for f in ("name", "legalName", "url", "telephone", "email", "address", "logo", "sameAs", "description"):
+        check(f in biz, f"{tag}: LocalBusiness missing {f}")
+    check(not any(x in biz for x in ("geo", "openingHoursSpecification", "aggregateRating")), f"{tag}: invented schema field")
+    check(all("@type" in n for n in ld["@graph"]), f"{tag}: node without type")
     if key == "home":
         faq = [n for n in ld["@graph"] if n["@type"] == "FAQPage"][0]
         ldfaq = [(q["name"], q["acceptedAnswer"]["text"]) for q in faq["mainEntity"]]
-        htmlfaq = re.findall(r"<summary><h3>(.*?)</h3></summary><p>(.*?)</p>", doc)
-        htmlfaq = [(html.unescape(q), html.unescape(a)) for q, a in htmlfaq]
-        check(ldfaq == htmlfaq == build.FAQ, "home: FAQ html != json-ld")
-        wc = [words(a) for _, a in build.FAQ]
-        for (q, a), n in zip(build.FAQ, wc):
-            check(40 <= n <= 60, f"FAQ '{q[:30]}': {n} words")
+        htmlfaq = [(html.unescape(q), html.unescape(a)) for q, a in re.findall(r"<summary><h3>(.*?)</h3></summary><p>(.*?)</p>", doc)]
+        check(ldfaq == htmlfaq == I.FAQ[lang], f"{tag}: FAQ html != json-ld")
+        wc = [words(a) for _, a in I.FAQ[lang]]
+        for (q, a), n in zip(I.FAQ[lang], wc):
+            check(40 <= n <= 60, f"FAQ {lang} '{q[:30]}': {n} words")
+        faq_rows.append((lang, wc))
         h2 = [x[1] for x in pm.h if x[0] == 2]
-        check(h2 == ["Traditional Gozo Wines & Liqueurs", "Artisanal Jams & Olive Oils", "Handcrafted Gozo Cheeses & Cured Meats",
-                     "Grown & Harvested in Gozo", "What Are Traditional Food Products from Gozo?", "Frequently Asked Questions", "Visit / Contact"], f"home h2: {h2}")
-        check(h1[0][1].replace(" ", " ").strip() == "Authentic Gozitan Produce & Delicacies | Gozo Cottage".replace("Produce & Delicacies", "Produce & Artisanal Delicacies"), f"h1 text: {h1[0][1]!r}")
+        check(len(h2) == 7, f"{tag}: {len(h2)} h2")
+        check(h1[0][1].replace(" ", " ").strip().endswith("| Gozo Cottage"), f"{tag}: h1 {h1[0][1]!r}")
         text = " ".join(pm.text)
-        for term in ("Island of Gozo", "Maltese Archipelago", "Mediterranean gastronomy", "Gozitan farmers", "Victoria Gozo",
-                     "Grown & Harvested in the Island Region of Gozo".lower(), "authentic", "traditional Gozo food", "Gozitan wine",
-                     "local Gozo jams", "traditional Maltese souvenirs", "Gozo Cottage products", "Gozo authentic produce"):
-            if not re.search(re.escape(term), text, re.I):
-                fails.append(f"home: keyword/GEO term missing: {term}")
-        prose = " ".join(re.findall(r"<p(?: [^>]*)?>(.*?)</p>", src, re.S))
-        prose = html.unescape(re.sub(r"<[^>]+>", "", prose))
-        def ptxt(seg):
-            seg = re.sub(r'<div class="notice">.*', "", seg, flags=re.S)
-            return html.unescape(re.sub(r"<[^>]+>", "", " ".join(re.findall(r"<p(?: [^>]*)?>(.*?)</p>", seg, re.S))))
-        main_txt = ptxt(src.split("<!-- HERO -->")[1].split("<!-- 1 WINES")[0]) + " " + ptxt(src.split("<!-- 4 GROWN")[1].split("<!-- 5 DIRECT")[0])
-        report.append(("main_words", words(main_txt)))
-        check(300 <= words(main_txt) <= 500, f"home: Haupttext {words(main_txt)} words")
-        report.append(("prose_words", words(prose)))
-        report.append(("faq_words", wc))
-        report.append(("h2", h2))
-    rows.append((pg["path"], t, len(t), d, len(d), ogt, len(ogt), ogd, len(ogd), img.replace(build.DOMAIN, ""), f"{w}x{h}", f"{kb:.0f} KB"))
+        if lang == "en":
+            check(h2 == ["Traditional Gozo Wines & Liqueurs", "Artisanal Jams & Olive Oils", "Handcrafted Gozo Cheeses & Cured Meats",
+                         "Grown & Harvested in Gozo", "What Are Traditional Food Products from Gozo?", "Frequently Asked Questions", "Visit / Contact"], f"home h2: {h2}")
+            check(h1[0][1].replace(" ", " ").strip() == "Authentic Gozitan Produce & Artisanal Delicacies | Gozo Cottage", f"h1 text: {h1[0][1]!r}")
+            for term in ("Island of Gozo", "Maltese Archipelago", "Mediterranean gastronomy", "Gozitan farmers", "Victoria Gozo",
+                         "Grown & Harvested in the Island Region of Gozo", "authentic", "traditional Gozo food", "Gozitan wine",
+                         "local Gozo jams", "traditional Maltese souvenirs", "Gozo Cottage products", "Gozo authentic produce"):
+                if not re.search(re.escape(term), text, re.I):
+                    fails.append(f"home/en: keyword/GEO term missing: {term}")
+        else:
+            for bad in ("Explore the range", "Frequently Asked", "Opening hours", "Grown & Harvested", "Visit / Contact"):
+                check(bad not in text, f"{tag}: English leftover '{bad}'")
 
-# every supplied image used exactly as planned (3rd file deliberately excluded)
+        def ptxt(seg):
+            seg = re.sub(r'<div class="notice".*', "", seg, flags=re.S)
+            return html.unescape(re.sub(r"<[^>]+>", "", " ".join(re.findall(r"<p(?: [^>]*)?>(.*?)</p>", seg, re.S))))
+        mt = ptxt(src.split("<!-- HERO -->")[1].split("<!-- 1 WINES")[0]) + " " + ptxt(src.split("<!-- 4 GROWN")[1].split("<!-- 5 DIRECT")[0])
+        main_rows.append((lang, words(mt)))
+        check(300 <= words(mt) <= 500, f"{tag}: Haupttext {words(mt)} words")
+        check("{{" not in src and "TODO:" in src, f"{tag}: unresolved placeholder or no TODO")
+    rows.append((pg["path"], t, len(t), d, len(d), ogt, len(ogt), ogd, len(ogd), img.replace(DOMAIN, ""), f"{w}x{h}", f"{kb:.0f} KB"))
+
+# hreflang bidirectional
+for (key, lang), alts in hreflang.items():
+    for l, href in alts.items():
+        if l == "x-default":
+            check(href == DOMAIN + build.BASE[key], f"{key}/{lang}: x-default target")
+            continue
+        check(hreflang.get((key, l), {}).get(lang) == alts[lang], f"{key}: hreflang {lang}->{l} not bidirectional")
+
+sm = open(os.path.join(ROOT, "sitemap.xml"), encoding="utf8").read()
+for pg in build.PAGES.values():
+    check(f"<loc>{DOMAIN}{pg['path']}</loc>" in sm, f"sitemap missing {pg['path']}")
+
 used = {os.path.basename(s) for s in all_img_files}
-for slug, m in build.MAN.items():
-    if slug == "gozo-cottage-logo":
-        check(any("gozo-cottage-logo" in u for u in used), "logo not used")
-        continue
-    check(f"{slug}.jpg" in used, f"image not used in any page: {slug}")
+for slug in build.MAN:
+    if slug != "gozo-cottage-logo":
+        check(f"{slug}.jpg" in used, f"image not used in EN home: {slug}")
+        for l in I.LANGS:
+            check(slug in I.ALT[l], f"alt missing {l}/{slug}")
 src_files = sorted(f for f in os.listdir(os.path.join(ROOT, "INFO", "Images")) if f.lower().endswith((".jpg", ".jpeg", ".png")))
 mapped = {m["src"] for m in build.MAN.values() if "src" in m} | {"Logo.jpg", "eu-funding-notice-full.png"}
 unused = [f for f in src_files if f not in mapped]
 
-# contrast
 pairs = [("body text", "#2b2417", "#f6f0e3"), ("muted text", "#5a4f3c", "#f6f0e3"), ("muted on sand", "#5a4f3c", "#ece2cb"),
          ("headings", "#243019", "#f6f0e3"), ("link", "#1e5b73", "#f6f0e3"), ("link on sand", "#1e5b73", "#ece2cb"),
          ("eyebrow red", "#9e1b20", "#f6f0e3"), ("eyebrow red on sand", "#9e1b20", "#ece2cb"),
          ("btn white on red", "#ffffff", "#9e1b20"), ("btn dark on gold", "#243019", "#f2d58a"),
          ("dark section text", "#f6f0e3", "#243019"), ("dark section gold link", "#f2d58a", "#243019"),
          ("dark small text", "#d9d0b8", "#243019"), ("footer text", "#d9d0b8", "#161d10"), ("footer link", "#f2d58a", "#161d10"),
-         ("tag olive on card", "#3f5128", "#fffaf0"), ("todo box", "#6c1115", "#fff4f2")]
+         ("tag olive on card", "#3f5128", "#fffaf0"), ("language switch active", "#ffffff", "#3f5128")]
 crow = []
 for n, a, b in pairs:
     r = ratio(a, b)
@@ -219,26 +251,25 @@ lhp = os.path.join(ROOT, "tools", "lighthouse.json")
 if os.path.exists(lhp):
     lh = json.load(open(lhp))
 
-# ------------------------------------------------------------------ report
-out = ["# SEO Report – Gozo Cottage", "", f"Stand: {build.MODIFIED} · automatisch erzeugt von `tools/check.py` (Status unten).", "",
-       "## 1. Meta-Daten je Seite", "",
+out = ["# SEO Report – Gozo Cottage", "", f"Stand: {build.MODIFIED} · automatisch erzeugt von `tools/check.py`. Sprachen: EN (Standard, `/`), MT (`/mt/`), IT (`/it/`).", "",
+       "## 1. Meta-Daten je Seite und Sprache", "",
        "| Seite | Title | Z. | Description | Z. | og:title | Z. | og:description | Z. | og:image | Maße | Größe |",
        "|---|---|--:|---|--:|---|--:|---|--:|---|---|---|"]
 for r in rows:
     out.append("| " + " | ".join(str(x).replace("|", "\\|") for x in r) + " |")
-out += ["", "Grenzen: Title 30–60, Description 120–155, og:title ≤ 90, og:description ≤ 200, OG-Bild 1200×630 und < 300 KB. Keine doppelten Titel/Descriptions; `og:title` ≠ `title`.", "",
-        "Weitere Pflicht-Tags je Seite (geprüft): canonical = og:url (absolut), `robots index, follow, max-image-preview:large`, `lang=\"en\"`, Favicon + Apple-Touch-Icon, `og:image:width/height/alt`, `og:site_name`, `og:locale=en_GB`, `og:type` (website / article), Twitter Card inkl. `twitter:image:alt`.", "",
-        "## 2. FAQ-Wortzahlen (identisch in HTML und `FAQPage`-JSON-LD)", "", "| # | Frage | Wörter |", "|--:|---|--:|"]
-wc = dict(report)["faq_words"]
-for i, ((q, a), n) in enumerate(zip(build.FAQ, wc), 1):
-    out.append(f"| {i} | {q} | {n} |")
-out += ["", f"Haupttext (Hero + Abschnitt „Grown & Harvested in Gozo“, ohne Förderhinweis): **{dict(report)['main_words']} Wörter** (Vorgabe 300–500). Gesamter Fließtext aller `<p>` der Startseite inkl. Produktkarten: {dict(report)['prose_words']} Wörter.", "",
-        "## 3. Überschriftenstruktur Startseite", "", "- H1 genau einmal: `Authentic Gozitan Produce & Artisanal Delicacies | Gozo Cottage`"]
-out += [f"- H2: {h}" for h in dict(report)["h2"]]
-out += ["", "Keine übersprungenen Ebenen (H1 → H2 → H3 → H4), geprüft für alle drei Seiten.", "",
-        "## 4. Bilder", "", f"- Verwendet: alle {len(mapped) - 1} Bilder aus `INFO/Images` inkl. Logo – bis auf die unten genannte Ausnahme. Jedes `<img>` hat `alt`, `width`, `height`; Hero: `fetchpriority=\"high\"` + Preload, alle anderen `loading=\"lazy\"`.",
-        f"- Nicht verwendet: {', '.join('`' + u + '`' for u in unused) or 'keine'} (Bar-Regal mit Fremdmarken, siehe `open-questions.md` Punkt 14).",
-        "- Format: WebP in 640 / 1280 / 1920 px (nie hochskaliert) über `<picture>`/`srcset`/`sizes`, JPEG-Fallback; SEO-Dateinamen.", "",
+out += ["", "Grenzen: Title 30–60, Description 120–155, og:title ≤ 90, og:description ≤ 200, OG-Bild 1200×630 und < 300 KB. Keine doppelten Titel/Descriptions/og:title über alle Seiten; `og:title` ≠ `title`.", "",
+        "Weitere Pflicht-Tags je Seite (geprüft): canonical = og:url (absolut, je Sprache eigene URL), `robots index, follow, max-image-preview:large`, `lang` passend zur Sprache, `og:locale` (en_GB / mt_MT / it_IT), Favicon + Apple-Touch-Icon, `og:image:width/height/alt`, `og:site_name`, `og:type`, Twitter Card inkl. `twitter:image:alt`.", "",
+        "**hreflang** (Startseiten und Legal Notice): `en`, `mt`, `it`, `x-default` (→ EN), je Seite selbstreferenzierend und bidirektional, identisch im `sitemap.xml`. Die Privacy Policy gibt es bewusst nur auf Englisch (Rechtstext unverändert) und hat deshalb keine Alternativen. Keine automatische Weiterleitung nach IP oder Browsersprache: der Wechsel läuft über echte `<a href>`-Links im Header.", "",
+        "## 2. FAQ-Wortzahlen (identisch in HTML und `FAQPage`-JSON-LD, je Sprache)", "", "| Sprache | Frage 1 | Frage 2 | Frage 3 | Frage 4 |", "|---|--:|--:|--:|--:|"]
+for lang, wc in faq_rows:
+    out.append(f"| {lang.upper()} | " + " | ".join(str(n) for n in wc) + " |")
+out += ["", "Haupttext (Hero + Abschnitt „Grown & Harvested in Gozo“, ohne Förderhinweis; Vorgabe 300–500 Wörter): " + ", ".join(f"{l.upper()} **{n}**" for l, n in main_rows) + ".", "",
+        "## 3. Überschriftenstruktur Startseite (EN)", "", "- H1 genau einmal: `Authentic Gozitan Produce & Artisanal Delicacies | Gozo Cottage`",
+        "- H2: Traditional Gozo Wines & Liqueurs · Artisanal Jams & Olive Oils · Handcrafted Gozo Cheeses & Cured Meats · Grown & Harvested in Gozo · What Are Traditional Food Products from Gozo? · Frequently Asked Questions · Visit / Contact",
+        "- MT und IT haben dieselbe Struktur (eine H1, sieben H2, gleiche Anker-IDs). Keine übersprungenen Ebenen auf allen sieben Seiten.", "",
+        "## 4. Bilder", "", "- Verwendet: alle Bilder aus `INFO/Images` inkl. Logo, Radierungen und Förderhinweis – bis auf die unten genannte Ausnahme. Jedes `<img>` hat `alt` (je Sprache übersetzt), `width`, `height`; Hero: `fetchpriority=\"high\"` + Preload, alle anderen `loading=\"lazy\"`.",
+        f"- Nicht verwendet: {', '.join('`' + u + '`' for u in unused) or 'keine'} (Bar-Regal mit Fremdmarken, siehe `open-questions.md`).",
+        "- Format: WebP in 480 / 800 / 1280 / 1920 px (nie hochskaliert) über `<picture>`/`srcset`/`sizes`, JPEG-Fallback; SEO-Dateinamen.", "",
         "## 5. Kontrast (WCAG AA ≥ 4,5:1)", "", "| Paar | Vordergrund | Hintergrund | Verhältnis |", "|---|---|---|--:|"]
 out += [f"| {n} | `{a}` | `{b}` | {r:.2f} |" for n, a, b, r in crow]
 out += ["", "## 6. Lighthouse (mobil, lokal)", ""]
@@ -246,26 +277,26 @@ if lh:
     out += ["| Seite | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |", "|---|--:|--:|--:|--:|--:|--:|--:|"]
     for k, v in lh.items():
         out.append(f"| {k} | {v['performance']} | {v['accessibility']} | {v['best-practices']} | {v['seo']} | {v.get('lcp','')} | {v.get('cls','')} | {v.get('tbt','')} |")
-    out.append("")
-    out.append("Gemessen mit Lighthouse gegen den lokalen Server (gedrosseltes Mobil-Profil). Eine Messung auf echtem Gerät im Mobilfunk steht aus.")
+    out += ["", "Gemessen mit Lighthouse gegen den lokalen Server (gedrosseltes Mobil-Profil). Komprimierung und Cache-Header kommen vom Hosting (`vercel.json` setzt Cache-Header). Eine Messung auf echtem Gerät im Mobilfunk steht aus."]
 else:
     out.append("_Noch nicht gemessen._")
 out += ["", "## 7. Mobile 375 px", "",
-        "Gemessen mit `tools/mobile-check.mjs` (headless Chrome, Gerätemetrik 375 px, nach Durchscrollen für Lazy-Images): `scrollWidth` = `clientWidth` = 375 auf `/`, `/privacy-policy/` und `/legal-notice/`; kein Element ragt über den Viewport (Ausnahme: bewusst scrollbare Bild-Schiene `.rail`, die nur intern scrollt); keine defekten Bilder. Desktop 1280 px: ebenfalls kein Überlauf.", ""]
-out += ["", "## 8. Checkliste (Briefing Punkt 12)", ""]
+        "Gemessen mit `tools/mobile-check.mjs` (headless Chrome, Gerätemetrik 375 px, nach Durchscrollen für Lazy-Images): `scrollWidth` = `clientWidth` = 375; kein Element ragt über den Viewport (Ausnahme: bewusst scrollbare Bild-Schiene `.rail`, die nur intern scrollt); keine defekten Bilder.", ""]
 status = "OK" if not fails else "FEHLER"
-out += [f"- Automatische Prüfung (`tools/check.py`): **{status}**" + ("" if not fails else " – " + "; ".join(fails)),
-        "- [x] Genau eine H1, H2-Struktur wie in Punkt 4",
+out += ["## 8. Checkliste (Briefing Punkt 12)", "",
+        f"- Automatische Prüfung (`tools/check.py`): **{status}**" + ("" if not fails else " – " + "; ".join(fails)),
+        "- [x] Genau eine H1, H2-Struktur wie in Punkt 4 (je Sprache)",
         "- [x] Title ≤ 60 und Description ≤ 155 Zeichen (Tabelle oben)",
-        "- [x] Jede FAQ-Antwort 40–60 Wörter (Tabelle oben)",
-        "- [x] Alle Bilder verwendet (Ausnahme dokumentiert), alle mit Alt, width, height",
-        "- [x] JSON-LD gültig, FAQ-Text identisch mit HTML; keine erfundenen Felder (`geo`, `openingHours`, `aggregateRating` bewusst nicht vorhanden)",
-        "- [x] GEO-Begriffe und Keywords aus Punkt 5 im Fließtext",
+        "- [x] Jede FAQ-Antwort 40–60 Wörter (je Sprache)",
+        "- [x] Alle Bilder verwendet (Ausnahme dokumentiert), alle mit Alt (übersetzt), width, height",
+        "- [x] JSON-LD gültig je Sprache, FAQ-Text identisch mit HTML; keine erfundenen Felder",
+        "- [x] GEO-Begriffe und Keywords aus Punkt 5 im englischen Fließtext",
         "- [x] Fakten belegt in `research.md`; Lücken als `<!-- TODO -->` + `open-questions.md`",
-        "- [x] Mobile Ansicht 375 px geprüft – kein horizontales Scrollen (Abschnitt 8)",
-        "- [x] Lighthouse-Lauf durchgeführt, Ergebnisse in Abschnitt 6",
+        "- [x] hreflang bidirektional, self-referencing, `x-default`; Sitemap mit Alternativen",
+        "- [x] Mobile Ansicht 375 px geprüft – kein horizontales Scrollen",
+        "- [x] Lighthouse-Lauf durchgeführt",
         "- [x] Jede Seite mit eigenem Title, Description, OG- und Twitter-Tags inkl. 1200×630-Bild", ""]
 open(os.path.join(ROOT, "seo-report.md"), "w", encoding="utf8").write("\n".join(out))
 print("\n".join(f"FAIL: {f}" for f in fails) or "all checks passed")
-print("prose words:", dict(report)["prose_words"], "| faq words:", wc)
+print("main words:", main_rows, "| faq words:", faq_rows)
 sys.exit(1 if fails else 0)

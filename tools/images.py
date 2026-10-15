@@ -173,9 +173,18 @@ def og(name, photo_slug, focus, kicker, headline):
         q -= 6
 
 
-og("og-home.jpg", "gozo-olive-oil-on-bread-olive-grove", 0.55, "Genuine produce of Gozo", ["Authentic Gozitan", "Produce & Delicacies"])
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import i18n as I
+
+PHOTO = {"home": ("gozo-olive-oil-on-bread-olive-grove", 0.55), "legal": ("gozo-cottage-sweet-tomato-paste-sundried-tomatoes", 0.45)}
+for f in os.listdir(OGDIR):
+    os.remove(os.path.join(OGDIR, f))
+for lang in I.LANGS:
+    for key, (slug, focus) in PHOTO.items():
+        kicker, lines = I.OG_TEXT[lang][key]
+        og(f"og-{key}-{lang}.jpg", slug, focus, kicker, lines)
 og("og-privacy.jpg", "gozo-green-olives-harvest", 0.4, "Privacy Policy", ["How we handle", "your information"])
-og("og-legal.jpg", "gozo-cottage-sweet-tomato-paste-sundried-tomatoes", 0.45, "Legal Notice", ["Company details &", "funding information"])
 
 json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 print("ok", len(manifest), "entries")

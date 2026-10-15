@@ -35,3 +35,12 @@ Alles, was fehlt oder unklar ist. Im Code jeweils als `<!-- TODO: … -->` marki
 22. **Robots-Policy:** Briefing verlangt `index, follow`; die Seite ist damit bei Veröffentlichung sofort indexierbar. Bei einem Staging-Test vorher `noindex` setzen.
 23. **Redirects:** `vercel.json` enthält die 301-Map der alten URLs. Gilt nur, wenn auf Vercel gehostet; sonst auf den tatsächlichen Host übertragen.
 24. **Lighthouse** – siehe `seo-report.md` (lokal gemessen; echte Mobilfunk-Messung steht noch aus).
+
+## Sprachen (EN / MT / IT)
+25. **Maltesisch und Italienisch sind von mir geschrieben, nicht von Muttersprachlern geprüft.** Vor Go-Live bitte gegenlesen lassen (besonders Maltesisch: Fachwörter wie „ġulepp tal-ħarrub“, „ġbejniet“, „inbid“, Orts- und Eigennamen). Texte: `src/index.body.mt.html`, `src/index.body.it.html`, `tools/i18n.py`.
+26. **Privacy Policy nur auf Englisch** – der Rechtstext soll unverändert bleiben; Übersetzung wäre ein neuer Rechtstext. MT/IT-Seiten verlinken sie mit „(bl-Ingliż)“ bzw. „(in inglese)“. Bei Ersatz durch eine passende DSGVO-Erklärung (Punkt 17) sinnvollerweise in allen drei Sprachen.
+27. **Legal Notice** ist übersetzt, die offiziellen EU-Programmtitel („Diversification through …“) bleiben im englischen Original in Anführungszeichen. Das Förderschild-Bild ist englisch.
+28. **Adresse bleibt in allen Sprachen identisch** (‘Gozitano Complex’, Mgarr Road, Xewkija XWK 9014, Gozo, Malta), damit NAP-Daten überall übereinstimmen.
+29. **Keine Auto-Weiterleitung nach Browsersprache** (SEO-Risiko); Umschalten über EN/MT/IT-Links im Header. Ein optionaler Hinweis-Banner („Diese Seite auf Italienisch ansehen“) ist nicht gebaut.
+30. **Keyword-Recherche je Sprache** (z. B. was Italiener oder Malteser wirklich suchen) wurde nicht gemacht – Titel/Descriptions sind übersetzt, nicht nativ recherchiert.
+31. **Alte URLs** (`/products/` usw.) leiten auf die englische Seite weiter; es gab keine Sprachversionen.

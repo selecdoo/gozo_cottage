@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.gozocottage.com/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://www.gozocottage.com/privacy-policy/</loc><lastmod>2026-10-15</lastmod></url>
-  <url><loc>https://www.gozocottage.com/legal-notice/</loc><lastmod>2026-10-15</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.gozocottage.com/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.gozocottage.com/"/>
+    <xhtml:link rel="alternate" hreflang="mt" href="https://www.gozocottage.com/mt/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.gozocottage.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.gozocottage.com/"/>
+  </url>
+  <url>
+    <loc>https://www.gozocottage.com/legal-notice/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.gozocottage.com/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="mt" href="https://www.gozocottage.com/mt/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.gozocottage.com/it/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.gozocottage.com/legal-notice/"/>
+  </url>
+  <url>
+    <loc>https://www.gozocottage.com/mt/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.gozocottage.com/"/>
+    <xhtml:link rel="alternate" hreflang="mt" href="https://www.gozocottage.com/mt/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.gozocottage.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.gozocottage.com/"/>
+  </url>
+  <url>
+    <loc>https://www.gozocottage.com/mt/legal-notice/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.gozocottage.com/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="mt" href="https://www.gozocottage.com/mt/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.gozocottage.com/it/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.gozocottage.com/legal-notice/"/>
+  </url>
+  <url>
+    <loc>https://www.gozocottage.com/it/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.gozocottage.com/"/>
+    <xhtml:link rel="alternate" hreflang="mt" href="https://www.gozocottage.com/mt/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.gozocottage.com/it/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.gozocottage.com/"/>
+  </url>
+  <url>
+    <loc>https://www.gozocottage.com/it/legal-notice/</loc>
+    <lastmod>2026-10-15</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.gozocottage.com/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="mt" href="https://www.gozocottage.com/mt/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.gozocottage.com/it/legal-notice/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.gozocottage.com/legal-notice/"/>
+  </url>
+  <url>
+    <loc>https://www.gozocottage.com/privacy-policy/</loc>
+    <lastmod>2026-10-15</lastmod>
+  </url>
 </urlset>

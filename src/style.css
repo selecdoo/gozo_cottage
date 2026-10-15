@@ -1,6 +1,8 @@
 /* Gozo Cottage – styles (inlined by tools/build.py) */
-@font-face{font-family:"Fraunces";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/fraunces-latin.woff2) format("woff2")}
-@font-face{font-family:"DM Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/dm-sans-latin.woff2) format("woff2")}
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/fraunces-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/fraunces-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/dm-sans-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(/fonts/dm-sans-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 
 :root{
   --bg:#f6f0e3;          /* limestone */
@@ -42,11 +44,16 @@ p{margin:0 0 1em}
 
 /* header */
 header.site{position:sticky;top:0;z-index:50;background:rgba(246,240,227,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:68px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:.8rem;min-height:68px}
+@media(max-width:860px){.bar .brand{margin-right:auto}}
 .brand img{height:54px;width:auto}
 nav.main ul{display:flex;gap:1.4rem;list-style:none;margin:0;padding:0}
 nav.main a{color:var(--ink);text-decoration:none;font-weight:600;font-size:.95rem;padding:.5rem 0;border-bottom:2px solid transparent}
 nav.main a:hover{border-color:var(--red);color:var(--ink)}
+.lang{display:flex;gap:.15rem;list-style:none;margin:0;padding:0}
+.lang a{display:block;padding:.45rem .6rem;border-radius:999px;font:700 .8rem/1 var(--sans);color:var(--ink);text-decoration:none;border:1px solid transparent}
+.lang a:hover{border-color:var(--olive);color:var(--ink)}
+.lang a[aria-current]{background:var(--olive);color:#fff}
 .menu{display:none}
 .menu summary{list-style:none;cursor:pointer;font-weight:700;padding:.55rem .9rem;border:1.5px solid var(--olive);border-radius:999px;color:var(--olive-d)}
 .menu summary::-webkit-details-marker{display:none}
