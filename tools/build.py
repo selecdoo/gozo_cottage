@@ -117,12 +117,13 @@ def header(lang, key):
         cur = ' aria-current="true"' if l == lang else ""
         sw.append(f'<li><a href="{href}" hreflang="{l}" lang="{l}"{cur} aria-label="{l.upper()} – {I.LANG_NAME[l]}">{l.upper()}</a></li>')
     sws = "".join(sw)
+    mlang = "".join(s.replace("<li>", "<li>", 1) for s in sw)
     return f"""<header class="site">
   <div class="wrap bar">
     <a class="brand" href="{pre}/" aria-label="{esc(u["home_aria"])}">{lg}</a>
     <nav class="main" aria-label="{esc(u["nav_aria"])}"><ul>{items}</ul></nav>
     <ul class="lang" aria-label="{esc(u["lang_aria"])}">{sws}</ul>
-    <details class="menu"><summary>{u["menu"]}</summary><ul>{items}</ul></details>
+    <details class="menu"><summary>{u["menu"]}</summary><ul>{items}<li class="mlang"><ul aria-label="{esc(u["lang_aria"])}">{mlang}</ul></li></ul></details>
   </div>
 </header>"""
 

@@ -89,10 +89,15 @@ nav.main ul{display:flex;gap:1.4rem;list-style:none;margin:0;padding:0}
 nav.main a{color:var(--ink);text-decoration:none;font-weight:600;font-size:.95rem;padding:.5rem 0;border-bottom:2px solid transparent}
 nav.main a:hover{border-color:var(--red);color:var(--ink)}
 .lang{display:flex;gap:.15rem;list-style:none;margin:0;padding:0}
-.lang a{display:block;padding:.45rem .6rem;border-radius:999px;font:700 .8rem/1 var(--sans);color:var(--ink);text-decoration:none;border:1px solid transparent}
+.lang{border:1.5px solid var(--olive);border-radius:999px;padding:.15rem}
+.lang a{display:block;min-width:2.6rem;text-align:center;padding:.6rem .55rem;border-radius:999px;font:700 .8rem/1 var(--sans);color:var(--ink);text-decoration:none;border:1px solid transparent}
 .lang a:hover{border-color:var(--olive);color:var(--ink)}
 .lang a[aria-current]{background:var(--olive);color:#fff}
 .menu{display:none}
+.menu .mlang{border-top:1px solid var(--line);margin-top:.4rem;padding-top:.6rem}
+.menu .mlang ul{position:static;display:flex;gap:.5rem;box-shadow:none;border:0;background:none;padding:0;margin:0}
+.menu .mlang a{flex:1;text-align:center;border:1.5px solid var(--olive);border-radius:999px;padding:.8rem 0}
+.menu .mlang a[aria-current]{background:var(--olive);color:#fff}
 .menu summary{list-style:none;cursor:pointer;font-weight:700;padding:.55rem .9rem;border:1.5px solid var(--olive);border-radius:999px;color:var(--olive-d)}
 .menu summary::-webkit-details-marker{display:none}
 .menu ul{position:absolute;right:1rem;top:68px;left:1rem;margin:0;padding:.6rem;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
@@ -533,7 +538,7 @@ footer.site li{margin:.3rem 0}
     <a class="brand" href="/it/" aria-label="Gozo Cottage – home"><picture><source type="image/webp" srcset="/images/gozo-cottage-logo-240.webp 240w, /images/gozo-cottage-logo-480.webp 480w" sizes="160px"><img src="/images/gozo-cottage-logo.jpg" width="240" height="119" alt="Logo Gozo Cottage: genuino prodotto di Gozo, dal 2003" fetchpriority="high" decoding="async"></picture></a>
     <nav class="main" aria-label="Principale"><ul><li><a href="/it/#wines-liqueurs">Vini e Liquori</a></li><li><a href="/it/#jams-olive-oil">Marmellate e Olio</a></li><li><a href="/it/#cheese-meats">Formaggi e Salumi</a></li><li><a href="/it/#grown-in-gozo">Coltivato a Gozo</a></li><li><a href="/it/#faq">FAQ</a></li><li><a href="/it/#visit-contact">Contatti</a></li></ul></nav>
     <ul class="lang" aria-label="Lingua"><li><a href="/" hreflang="en" lang="en" aria-label="EN – English">EN</a></li><li><a href="/mt/" hreflang="mt" lang="mt" aria-label="MT – Malti">MT</a></li><li><a href="/it/" hreflang="it" lang="it" aria-current="true" aria-label="IT – Italiano">IT</a></li></ul>
-    <details class="menu"><summary>Menu</summary><ul><li><a href="/it/#wines-liqueurs">Vini e Liquori</a></li><li><a href="/it/#jams-olive-oil">Marmellate e Olio</a></li><li><a href="/it/#cheese-meats">Formaggi e Salumi</a></li><li><a href="/it/#grown-in-gozo">Coltivato a Gozo</a></li><li><a href="/it/#faq">FAQ</a></li><li><a href="/it/#visit-contact">Contatti</a></li></ul></details>
+    <details class="menu"><summary>Menu</summary><ul><li><a href="/it/#wines-liqueurs">Vini e Liquori</a></li><li><a href="/it/#jams-olive-oil">Marmellate e Olio</a></li><li><a href="/it/#cheese-meats">Formaggi e Salumi</a></li><li><a href="/it/#grown-in-gozo">Coltivato a Gozo</a></li><li><a href="/it/#faq">FAQ</a></li><li><a href="/it/#visit-contact">Contatti</a></li><li class="mlang"><ul aria-label="Lingua"><li><a href="/" hreflang="en" lang="en" aria-label="EN – English">EN</a></li><li><a href="/mt/" hreflang="mt" lang="mt" aria-label="MT – Malti">MT</a></li><li><a href="/it/" hreflang="it" lang="it" aria-current="true" aria-label="IT – Italiano">IT</a></li></ul></li></ul></details>
   </div>
 </header>
 <main id="main">
@@ -727,16 +732,6 @@ footer.site li{margin:.3rem 0}
       <h3>Lavorato lo stesso giorno, a Gozo</h3>
       <p>Tutti i prodotti Gozo Cottage condividono lo stesso segreto: il meglio dei prodotti agricoli di Gozo, raccolto e lavorato lo stesso giorno, senza aromi artificiali, conservanti o coloranti aggiunti. L’azienda lavora in strutture moderne a Gozo, dove le ricette tradizionali incontrano la tecnologia attuale, nel rigoroso rispetto delle norme igieniche HACCP.</p>
       <p>Gozo Cottage elenca queste aree nella sua struttura: cantina, lavorazione e stagionatura delle carni, produzione casearia con ricevimento del latte crudo, lavorazione delle marmellate, produzione di olio d’oliva, confezionamento e una sala di prova, ricerca e degustazione.</p>
-
-      <div class="notice" id="funding-notice">
-        <figure class="photo" style="margin:0">
-          <picture><source type="image/webp" srcset="/images/eu-rural-development-funding-notice-480.webp 480w, /images/eu-rural-development-funding-notice-800.webp 800w, /images/eu-rural-development-funding-notice-1024.webp 1024w" sizes="(min-width:860px) 480px, 92vw"><img src="/images/eu-rural-development-funding-notice.jpg" width="1024" height="558" alt="Avviso di finanziamento: progetto parzialmente finanziato dall’Unione Europea, Programma di sviluppo rurale per Malta 2014-2020, Misura 4 Sottomisura 4.2" loading="lazy" decoding="async"></picture>
-        </figure>
-        <div>
-          <h3>Progetto parzialmente finanziato dall’Unione Europea</h3>
-          <p>L’investimento “Diversification through the introduction of new infrastructure and equipment” (Misura 4, Sottomisura 4.2, Programma di sviluppo rurale per Malta 2014–2020) è parzialmente finanziato dall’Unione Europea, con un tasso di cofinanziamento del 75&nbsp;% Unione Europea e del 25&nbsp;% Governo di Malta, tramite il Fondo europeo agricolo per lo sviluppo rurale (FEASR / EAFRD).</p>
-        </div>
-      </div>
     </div>
   </section>
 
